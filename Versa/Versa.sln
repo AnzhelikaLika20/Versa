@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersaProject", "..\VersaProject\VersaProject\VersaProject.csproj", "{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Versa.Api", "..\VersaProject\Versa.Api\Versa.Api.csproj", "{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{929A0A13-BF5B-467D-95D6-0F2E4CE8F6E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersaProject.Bll", "VersaProject.Bll\VersaProject.Bll.csproj", "{5D5B3A98-1295-49B1-8684-D85AC3BCFA14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersaProject.Dal", "VersaProject.Dal\VersaProject.Dal.csproj", "{5AEBDB74-620A-442F-B7D3-9EED95761D97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +18,18 @@ Global
 		{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5B3A98-1295-49B1-8684-D85AC3BCFA14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5B3A98-1295-49B1-8684-D85AC3BCFA14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5B3A98-1295-49B1-8684-D85AC3BCFA14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5B3A98-1295-49B1-8684-D85AC3BCFA14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AEBDB74-620A-442F-B7D3-9EED95761D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AEBDB74-620A-442F-B7D3-9EED95761D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AEBDB74-620A-442F-B7D3-9EED95761D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AEBDB74-620A-442F-B7D3-9EED95761D97}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{53D27BEE-29BB-4E99-A7CA-5523BBD8F9C7} = {929A0A13-BF5B-467D-95D6-0F2E4CE8F6E4}
+		{5D5B3A98-1295-49B1-8684-D85AC3BCFA14} = {929A0A13-BF5B-467D-95D6-0F2E4CE8F6E4}
+		{5AEBDB74-620A-442F-B7D3-9EED95761D97} = {929A0A13-BF5B-467D-95D6-0F2E4CE8F6E4}
 	EndGlobalSection
 EndGlobal

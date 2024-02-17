@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using VersaProject.Dal.Extensions;
 
 namespace VersaProject;
 
@@ -13,6 +14,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddDalInfrastructure(Configuration).AddDalRepositories();
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
@@ -26,7 +28,7 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.jso", "VersaProject v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.jso", "Versa.Api v1"));
         }
 
         app.UseRouting();
@@ -36,5 +38,6 @@ public class Startup
             endpoints.MapControllers();
 
         });
+        app.MigrateUp();
     }
 }
