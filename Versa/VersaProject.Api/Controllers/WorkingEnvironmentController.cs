@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace VersaProject.Controllers;
+namespace VersaProject.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
