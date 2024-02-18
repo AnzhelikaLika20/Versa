@@ -1,7 +1,13 @@
 ﻿using Microsoft.OpenApi.Models;
 using VersaProject.Dal.Extensions;
+using MediatR;
+using VersaProject.Bll.Commands;
+using VersaProject.Bll.Services;
+using VersaProject.Bll.Services.Interfaces;
+using VersaProject.Dal.Repositories;
+using VersaProject.Dal.Repositories.Interfaces;
 
-namespace VersaProject;
+namespace VersaProject.Api;
 
 public class Startup
 {
@@ -15,6 +21,10 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDalInfrastructure(Configuration).AddDalRepositories();
+        services.AddTransient<IUserRepository, UserRepository>();
+        services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+        services.AddScoped<IRequestHandler<AddUserCommand, long>, AddUserHandler>();
+        services.AddSingleton<IRegisterUserService, RegisterUserService>();
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {

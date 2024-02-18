@@ -1,7 +1,7 @@
 ﻿using System.Transactions;
 using Dapper;
 using Microsoft.Extensions.Options;
-using VersaProject.Dal.Models;
+using VersaProject.Dal.Entities;
 using VersaProject.Dal.Repositories.Interfaces;
 using VersaProject.Dal.Settings;
 
@@ -13,33 +13,27 @@ public class UserRepository : BaseRepository, IUserRepository
     {
     }
 
-    public async Task<long> Add(User user,
-        CancellationToken token)
+    public async Task<long> Add(User user, CancellationToken token)
     {
         const string sqlQuery = @"
-insert into users (id, name)
-select id, name
-    from UNNEST(@User)
-returning id
-";
-        var sqlQueryParams = new
-        {
-            User = user
-        };
-
+        INSERT INTO users (id, name)
+        VALUES (@Id, @Name)
+        RETURNING id";
+        
         await using var connection = await GetAndOpenConnection();
-        var id = await connection.QueryAsync<long>(
+        var id = await connection.QuerySingleOrDefaultAsync<long>(
             new CommandDefinition(
-            sqlQuery,
-            sqlQueryParams,
-            cancellationToken: token));
-        return id.FirstOrDefault();
+                sqlQuery,
+                new { user.Id, user.Name },
+                cancellationToken: token));
+    
+        return id;
     }
 
     public async Task<User> Query(long id, CancellationToken token)
     {
         const string sqlQuery = @"
-select * from user where id = @Id;
+select * from Users where id = @Id;
 ";
         var sqlQueryParams = new
         {

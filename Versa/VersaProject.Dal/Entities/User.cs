@@ -1,3 +1,3 @@
-﻿namespace VersaProject.Dal.Models;
+﻿namespace VersaProject.Dal.Entities;
 
-public record User(long id, string name);
+public record User(long Id, string Name);

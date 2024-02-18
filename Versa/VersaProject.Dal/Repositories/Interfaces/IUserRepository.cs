@@ -1,4 +1,4 @@
-﻿using VersaProject.Dal.Models;
+﻿using VersaProject.Dal.Entities;
 
 namespace VersaProject.Dal.Repositories.Interfaces;
 

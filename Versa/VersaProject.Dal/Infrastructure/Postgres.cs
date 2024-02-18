@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using Npgsql.NameTranslation;
-using VersaProject.Dal.Models;
+using VersaProject.Dal.Entities;
 using VersaProject.Dal.Settings;
 
 namespace VersaProject.Dal.Infrastructure;
