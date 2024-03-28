@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Helmet } from 'react-helmet'
 
-import './../css/not-found.css'
+import './../css/NotFound.css'
 
 
 class NotFound extends React.Component {

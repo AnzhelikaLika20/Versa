@@ -1,0 +1,229 @@
+.sign-in-frame-container {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+}
+.sign-in-frame-frame1 {
+    gap: 10px;
+    width: 100%;
+    height: 1002px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    align-items: center;
+    flex-shrink: 0;
+    justify-content: center;
+    background-color: rgba(1, 3, 26, 1);
+}
+.sign-in-frame-slogan {
+    top: 180px;
+    left: var(--dl-space-space-twounits);
+    color: rgb(255, 255, 255);
+    width: 797px;
+    height: auto;
+    position: absolute;
+    font-size: 150px;
+    font-style: normal;
+    text-align: left;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+}
+.sign-in-frame-sign-in {
+    top: 35px;
+    left: 861px;
+    color: rgb(255, 255, 255, 1);
+    width: 210px;
+    height: 83px;
+    position: absolute;
+    font-size: 36px;
+    font-style: normal;
+    text-align: center;
+    font-weight: 600;
+    border-color: rgb(81, 208, 210);
+    border-width: 3px;
+    border-radius: 19px;
+    background-color: rgb(1, 3, 26, 1);
+}
+.sign-in-frame-sign-up {
+    top: 35px;
+    left: 1130px;
+    color: rgb(255, 255, 255, 1);
+    width: 210px;
+    height: 83px;
+    position: absolute;
+    font-size: 36px;
+    font-style: normal;
+    text-align: center;
+    font-weight: 600;
+    border-color: rgba(254, 114, 101, 1);
+    border-width: 3px;
+    border-radius: 19px;
+    background-color: rgba(1, 3, 26, 1);
+}
+.sign-in-frame-feature-picture {
+    top: 413px;
+    flex: 0 0 auto;
+    left: 825px;
+    width: 524px;
+    height: 413px;
+    display: flex;
+    position: absolute;
+    align-items: flex-start;
+    border-radius: 39px;
+    flex-direction: column;
+    background-color: rgba(217, 217, 217, 0.42);
+}
+.sign-in-frame-fish {
+    top: 220px;
+    flex: 1;
+    left: 825px;
+    width: 524px;
+    height: 162px;
+    display: flex;
+    position: absolute;
+    align-items: flex-start;
+    border-radius: 39px;
+    background-color: rgba(217, 217, 217, 0.42);
+}
+.sign-in-frame-text {
+    top: 27px;
+    left: 27px;
+    color: rgba(255, 255, 255, 1);
+    width: 464px;
+    height: auto;
+    margin: auto;
+    position: absolute;
+    font-size: 42px;
+    font-style: normal;
+    text-align: left;
+    font-family: Inter, sans-serif;
+    font-weight: 200;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration:   none;
+}
+.sign-in-frame-text1 {
+    text-decoration: NONE;
+}
+.sign-in-frame-rectangle4 {
+    top: 0;
+    left: 0;
+    width: 1440px;
+    height: 900px;
+    position: absolute;
+}
+.sign-in-frame-form {
+    top: 20px;
+    left: 360px;
+    width: 720px;
+    height: 750px;
+    display: flex;
+    position: absolute;
+    align-items: flex-start;
+    flex-shrink: 1;
+    border-color: rgba(81, 208, 210, 1);
+    border-width: 3px;
+    border-radius: 42px;
+    background-color: rgba(1, 3, 26, 1);
+}
+.sign-in-frame-email {
+    top: 229px;
+    left: 30px;
+    width: 660px;
+    height: 104px;
+    display: flex;
+    position: absolute;
+    align-items: flex-start;
+    flex-shrink: 1;
+    border-radius: 42px;
+    background-color: rgba(217, 217, 217, 0.4300000071525574);
+}
+.sign-in-frame-text3 {
+    top: 23px;
+    left: 25px;
+    color: rgba(217, 217, 217, 1);
+    width: 610px;
+    height: auto;
+    position: absolute;
+    font-size: 42px;
+    font-style: normal;
+    text-align: left;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+}
+.sign-in-frame-password {
+    top: 430px;
+    left: 30px;
+    width: 660px;
+    height: 104px;
+    display: flex;
+    position: absolute;
+    align-items: flex-start;
+    flex-shrink: 1;
+    border-radius: 42px;
+    background-color: rgba(217, 217, 217, 0.4300000071525574);
+}
+.sign-in-frame-text5 {
+    top: 23px;
+    left: 25px;
+    color: rgba(217, 217, 217, 1);
+    width: 610px;
+    height: auto;
+    position: absolute;
+    font-size: 42px;
+    font-style: normal;
+    text-align: left;
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+}
+.sign-in-frame-ellipse1 {
+    top: 21px;
+    left: 655px;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+}
+.sign-in-frame-text7 {
+    top: 47px;
+    left: 62px;
+    color: rgba(217, 217, 217, 1);
+    width: 560px;
+    height: auto;
+    position: absolute;
+    font-size: 50px;
+    font-style: Semi Bold;
+    text-align: left;
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+    line-height: normal;
+    font-stretch: normal;
+    text-decoration: none;
+}
+.sign-in-frame-button {
+    top: 600px;
+    left: 255px;
+    color: white;
+    width: 210px;
+    height: 83px;
+    position: absolute;
+    font-size: 36px;
+    font-style: normal;
+    text-align: center;
+    font-weight: 600;
+    border-color: rgba(81, 208, 210, 1);
+    border-width: 3px;
+    border-radius: 19px;
+    background-color: rgba(1, 3, 26, 1);
+}
