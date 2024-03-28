@@ -17,10 +17,10 @@ class Image extends React.Component {
     }
     
     render() {
-        const {src, className, toHover, onClick} = this.props;
+        const {src, className, onClick} = this.props;
         
         const imageHoverStyles = {
-            cursor: toHover ? 'pointer' : 'default'
+            cursor: this.state.isHovered ? 'pointer' : 'default'
         };
 
         return (

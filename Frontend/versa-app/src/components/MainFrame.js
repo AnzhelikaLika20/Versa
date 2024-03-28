@@ -4,15 +4,19 @@ import React from 'react'
 import './../css/MainFrame.css'
 import Button from './Button'
 import SignInFrame from "./SignInFrame";
+import SignUpFrame from "./SignUpFrame";
 
 class MainFrame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isSignInOpen: false
+            isSignInOpen: false,
+            isSignUpOpen: false
         };
         this.openSignIn = this.openSignIn.bind(this)
         this.closeSignIn = this.closeSignIn.bind(this)
+        this.openSignUp = this.openSignUp.bind(this)
+        this.closeSignUp = this.closeSignUp.bind(this)
     }
 
     openSignIn() {
@@ -24,9 +28,21 @@ class MainFrame extends React.Component {
         
     }
 
+    openSignUp() {
+        console.log("open")
+        this.setState({isSignUpOpen: true})
+    }
+
+    closeSignUp() {
+        this.setState({isSignUpOpen: false})
+    }
+
     render() {
         if (this.state.isSignInOpen)
             return <SignInFrame onClick={() => this.closeSignIn()}/>
+        
+        if (this.state.isSignUpOpen)
+            return <SignUpFrame onClick={() => this.closeSignUp()}/>
         
         return (
             <div className="frame1-container">
@@ -51,7 +67,8 @@ class MainFrame extends React.Component {
                     </div>
                     <Button text="Sign in" backgroundColor="rgb(81, 208, 210)" id="frame1-sign-in"
                             onClick={() => this.openSignIn()}/>
-                    <Button text="Sign up" backgroundColor="rgba(254, 114, 101, 1)" id="frame1-sign-up"/>
+                    <Button text="Sign up" backgroundColor="rgba(254, 114, 101, 1)" id="frame1-sign-up"
+                            onClick={() => this.openSignUp()}/>
                 </div>
             </div>
         )
