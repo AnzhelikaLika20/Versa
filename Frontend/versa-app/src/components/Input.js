@@ -29,6 +29,12 @@ class Input extends React.Component {
     }
 
     handleEmailChange(event) {
+        if (event.target.value.length === 0) {
+            this.setState({
+                isWrongEmail: false
+            })
+            return
+        }
         let status
         if (validateEmail(event.target.value)) {
             status = false
@@ -43,6 +49,12 @@ class Input extends React.Component {
     }
 
     handlePasswordChange(event) {
+        if (event.target.value.length === 0) {
+            this.setState({
+                isWrongPassword: false
+            })
+            return
+        }
         let status
         if (event.target.value.length < 10) {
             status = true
@@ -105,7 +117,6 @@ class Input extends React.Component {
                     </span>
                 )}
             </div>
-            
         );
     }
 }
