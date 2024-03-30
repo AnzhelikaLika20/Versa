@@ -10,7 +10,6 @@ import Image from "./Image";
 import Input from "./Input";
 
 class SignUpFrame extends React.Component {
-
     render() {
         const {onClick} = this.props
 
@@ -33,7 +32,7 @@ class SignUpFrame extends React.Component {
                         <span className="sign-up-frame-text7">
             <span>Create your own personal account</span>
           </span>
-                        <Button text="Continue" backgroundColor="rgb(81, 208, 210)" id="sign-up-frame-button"/>
+                        <Button text="Continue" backgroundColor="rgba(254, 114, 101)" id="sign-up-frame-button"/>
                     </div>
                 </div>
             </div>
