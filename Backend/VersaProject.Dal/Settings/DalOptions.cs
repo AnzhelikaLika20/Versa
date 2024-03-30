@@ -1,6 +1,0 @@
-﻿namespace VersaProject.Dal.Settings;
-
-public record DalOptions
-{
-    public string ConnectionString { get; init; } = string.Empty;
-}
