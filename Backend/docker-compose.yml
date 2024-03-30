@@ -1,9 +1,14 @@
 ﻿services:
   versaproject.api:
-    image: versaproject.api
-    build:
-      context: .
-      dockerfile: VersaProject.Api/Dockerfile
+    depends_on: 
+      - database
+    image: anjelikalika/versaproject.api
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+    ports:
+      - "8080:8080"
   database:
     image: postgres
     environment:
