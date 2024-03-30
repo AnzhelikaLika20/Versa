@@ -21,9 +21,17 @@ class SignUpFrame extends React.Component {
                 </Helmet>
                 <div className="sign-up-frame-frame1">
                     <div className="sign-up-frame-form">
-                        <Input type={"email"} placeholder={"email"} className={"sign-up-frame-email"} />
+                        <Input type={"email"} 
+                               placeholder={"email"} 
+                               className={"sign-up-frame-email"}
+                               errorClassName={"error-email"}
+                        />
 
-                        <Input type={"password"} placeholder={"password"} className={"sign-up-frame-password"} />
+                        <Input type={"password"} 
+                               placeholder={"password"} 
+                               className={"sign-up-frame-password"}
+                               errorClassName={"error-password"}
+                        />
 
                         <Image src={close}
                                className="sign-up-frame-ellipse1"
