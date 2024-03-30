@@ -7,10 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee7bbb08-6e14-4f45-885d-41d48bd3eec3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Versa/.idea/shelf/Changes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Versa/.idea/shelf/Changes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Versa/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Versa/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/versa-app/src/components/SignUpFrame.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/versa-app/src/components/SignUpFrame.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/versa-app/src/css/SignUpFrame.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/versa-app/src/css/SignUpFrame.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +98,7 @@
       <updated>1711577113639</updated>
       <workItem from="1711577116522" duration="1890000" />
       <workItem from="1711605263525" duration="5037000" />
-      <workItem from="1711803135722" duration="1107000" />
+      <workItem from="1711803135722" duration="2419000" />
     </task>
     <servers />
   </component>
