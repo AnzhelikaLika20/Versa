@@ -10,6 +10,7 @@ using VersaProject.Dal.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<YandexCloudSettings>(builder.Configuration.GetSection(nameof(YandexCloudSettings)));
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
 var config = builder.Configuration.GetRequiredSection(nameof(DatabaseSettings)).Get<DatabaseSettings>()!;
 builder.Services.AddDalInfrastructure(config).AddDalRepositories();
