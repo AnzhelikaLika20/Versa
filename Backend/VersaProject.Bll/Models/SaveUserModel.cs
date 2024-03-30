@@ -1,3 +1,3 @@
 ﻿namespace VersaProject.Bll.Models;
 
-public record SaveUserModel (long Id, string Name);
+public record SaveUserModel (long Login);

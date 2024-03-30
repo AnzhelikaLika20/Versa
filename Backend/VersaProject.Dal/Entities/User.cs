@@ -1,3 +1,7 @@
-﻿namespace VersaProject.Dal.Entities;
+﻿using Microsoft.AspNetCore.Identity;
 
-public record User(long Id, string Name);
+namespace VersaProject.Dal.Entities;
+
+public class User : IdentityUser
+{
+}
