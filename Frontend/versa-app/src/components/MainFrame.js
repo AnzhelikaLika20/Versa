@@ -29,7 +29,6 @@ class MainFrame extends React.Component {
     }
 
     openSignUp() {
-        console.log("open")
         this.setState({isSignUpOpen: true})
     }
 
