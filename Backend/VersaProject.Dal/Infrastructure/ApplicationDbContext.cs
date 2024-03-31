@@ -1,16 +1,15 @@
-﻿
-
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VersaProject.Dal.Entities;
 
 namespace VersaProject.Dal.Infrastructure;
 
-public class ApplicationDbContext  : IdentityDbContext<User>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User>(options)
 {
-    public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    public required DbSet<FileData> FilesData { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        base.OnModelCreating(modelBuilder);
     }
 }

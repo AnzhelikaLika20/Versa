@@ -52,6 +52,19 @@ namespace VersaProject.Dal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FilesData",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilesData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -212,6 +225,9 @@ namespace VersaProject.Dal.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "FilesData");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -12,7 +12,7 @@ using VersaProject.Dal.Infrastructure;
 namespace VersaProject.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240330161813_Initial")]
+    [Migration("20240331000933_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -155,6 +155,23 @@ namespace VersaProject.Dal.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("VersaProject.Dal.Entities.FileData", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FilesData");
                 });
 
             modelBuilder.Entity("VersaProject.Dal.Entities.User", b =>

@@ -4,13 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
+using VersaProject.Dal.Entities;
+using VersaProject.Dal.Repositories;
+using VersaProject.Dal.Repositories.Interfaces;
 using VersaProject.Dal.Settings;
 
 namespace VersaProject.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> cloudSettings) : ControllerBase
+public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IFileDataRepository fileDataRepository) : ControllerBase
 {
     [HttpPost("UploadFile")]
     public async Task<IActionResult> UploadFile(IFormFile file)
@@ -37,7 +40,13 @@ public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> 
             };
 
             PutObjectResponse response = await s3Client.PutObjectAsync(request);
-
+            var fileData = new FileData { 
+                FileName = file.FileName, 
+                Id = uniqueId, 
+                Version = 2};
+            
+            await fileDataRepository.SaveFileDataAsync(fileData);
+            
             if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
             {
                 return Ok("File uploaded successfully");
