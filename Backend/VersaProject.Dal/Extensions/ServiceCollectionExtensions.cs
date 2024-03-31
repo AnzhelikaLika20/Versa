@@ -1,9 +1,10 @@
-﻿using FluentMigrator.Runner.Generators.Postgres;
-using Microsoft.Extensions.Configuration;
+﻿
+    
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VersaProject.Dal.Infrastructure;
 using VersaProject.Dal.Settings;
-    
+
 namespace VersaProject.Dal.Extensions;
 
 public static class ServiceCollectionExtensions
@@ -13,14 +14,10 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddDalInfrastructure(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddDalInfrastructure(this IServiceCollection services, DatabaseSettings config)
     {
-        services.Configure<DalOptions>(options => config.GetSection(nameof(DalOptions)).Bind(options));
-
-        Postgres.MapCompositeTypes();
-
-        Postgres.AddMigrations(services);
-
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(config.ConnectionString));
         return services;
     }
 }
