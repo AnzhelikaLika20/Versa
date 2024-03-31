@@ -13,10 +13,11 @@ public class FileDataRepository(ApplicationDbContext context) : IFileDataReposit
         return await context.SaveChangesAsync();
     }
 
-    public async Task<FileData?> GetLatestFileData(string fileName)
+    public async Task<FileData?> GetLatestFileData(string fileName, string login)
     {
         var latestFileVersion = await context.FilesData
             .Where(f => f.FileName == fileName)
+            .Where(f => f.UserLogin == login)
             .OrderByDescending(f => f.Version)
             .FirstOrDefaultAsync();
 
