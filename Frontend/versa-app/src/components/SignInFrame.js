@@ -5,7 +5,6 @@ import {Helmet} from 'react-helmet'
 import './../css/SignInFrame.css'
 import Button from "./Button";
 import close from './../img/ellipse.png'
-import background from './../img/rectangle.png'
 import Image from "./Image";
 import Input from "./Input";
 
@@ -24,9 +23,17 @@ class SignInFrame extends React.Component {
                     <div className="sign-in-frame-background"></div>
 
                     <div className="sign-in-frame-form">
-                        <Input type={"email"} placeholder={"email"} className={"sign-in-frame-email"} />
+                        <Input type={"email"}
+                               placeholder={"email"} 
+                               className={"sign-in-frame-email"}
+                               errorClassName={"error-email"}
+                        />
 
-                        <Input type={"password"} placeholder={"password"} className={"sign-in-frame-password"} />
+                        <Input type={"password"} 
+                               placeholder={"password"} 
+                               className={"sign-in-frame-password"} 
+                               errorClassName={"error-password"}
+                        />
                         
                         <Image src={close}
                                className="sign-in-frame-ellipse1"

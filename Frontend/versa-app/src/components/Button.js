@@ -6,6 +6,9 @@ class Button extends React.Component {
         this.state = {
             isHovered: false
         };
+
+        this.handleMouseEnter = this.handleMouseEnter.bind(this)
+        this.handleMouseLeave = this.handleMouseLeave.bind(this)
     }
 
     handleMouseEnter = () => {
@@ -15,7 +18,6 @@ class Button extends React.Component {
     handleMouseLeave = () => {
         this.setState({isHovered: false})
     }
-    
     
     render() {
         const { text, backgroundColor, id, onClick } = this.props;

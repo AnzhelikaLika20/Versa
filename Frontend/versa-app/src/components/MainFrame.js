@@ -5,13 +5,15 @@ import './../css/MainFrame.css'
 import Button from './Button'
 import SignInFrame from "./SignInFrame";
 import SignUpFrame from "./SignUpFrame";
+import EditorFrame from "./EditorFrame";
 
 class MainFrame extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isSignInOpen: false,
-            isSignUpOpen: false
+            isSignUpOpen: false,
+            isEditorOpen: true
         };
         this.openSignIn = this.openSignIn.bind(this)
         this.closeSignIn = this.closeSignIn.bind(this)
@@ -29,7 +31,6 @@ class MainFrame extends React.Component {
     }
 
     openSignUp() {
-        console.log("open")
         this.setState({isSignUpOpen: true})
     }
 
@@ -38,6 +39,9 @@ class MainFrame extends React.Component {
     }
 
     render() {
+        if (this.state.isEditorOpen)
+            return <EditorFrame />
+        
         if (this.state.isSignInOpen)
             return <SignInFrame onClick={() => this.closeSignIn()}/>
         
