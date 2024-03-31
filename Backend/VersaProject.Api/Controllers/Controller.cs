@@ -30,7 +30,7 @@ public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> 
             var accessKey = cloudSettings.Value.AccessKeyId;
             AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
             string uniqueId = Guid.NewGuid().ToString();
-
+            var fileName = file.FileName;
             PutObjectRequest request = new PutObjectRequest
             {
                 BucketName = "versa",
@@ -39,11 +39,19 @@ public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> 
                 InputStream = file.OpenReadStream()
             };
 
+            var latestFile = await fileDataRepository.GetLatestFileData(fileName);
+            int newVersion;
+            if (latestFile == null)
+                newVersion = 0;
+            else
+                newVersion = latestFile.Version + 1;
+            
             PutObjectResponse response = await s3Client.PutObjectAsync(request);
             var fileData = new FileData { 
-                FileName = file.FileName, 
+                FileName = fileName, 
                 Id = uniqueId, 
-                Version = 2};
+                Version = newVersion
+            };
             
             await fileDataRepository.SaveFileDataAsync(fileData);
             
