@@ -3,6 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using VersaProject.Dal.Infrastructure;
+using VersaProject.Dal.Repositories;
+using VersaProject.Dal.Repositories.Interfaces;
 using VersaProject.Dal.Settings;
 
 namespace VersaProject.Dal.Extensions;
@@ -11,6 +13,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDalRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IFileDataRepository, FileDataRepository>();
         return services;
     }
 

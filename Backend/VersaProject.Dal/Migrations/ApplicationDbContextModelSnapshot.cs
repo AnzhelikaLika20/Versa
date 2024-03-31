@@ -154,6 +154,23 @@ namespace VersaProject.Dal.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("VersaProject.Dal.Entities.FileData", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FilesData");
+                });
+
             modelBuilder.Entity("VersaProject.Dal.Entities.User", b =>
                 {
                     b.Property<string>("Id")
