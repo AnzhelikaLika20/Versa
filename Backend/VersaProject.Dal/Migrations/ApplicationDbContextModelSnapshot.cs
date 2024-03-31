@@ -163,6 +163,10 @@ namespace VersaProject.Dal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("UserLogin")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Version")
                         .HasColumnType("integer");
 

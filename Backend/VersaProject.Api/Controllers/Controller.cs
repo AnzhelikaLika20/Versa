@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using System.Net;
+using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace VersaProject.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IFileDataRepository fileDataRepository) : ControllerBase
 {
     [HttpPost("UploadFile")]
@@ -38,8 +40,9 @@ public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> 
                 ContentType = file.ContentType,
                 InputStream = file.OpenReadStream()
             };
+            var currentUser = User.Identity.Name;
 
-            var latestFile = await fileDataRepository.GetLatestFileData(fileName);
+            var latestFile = await fileDataRepository.GetLatestFileData(fileName, currentUser);
             int newVersion;
             if (latestFile == null)
                 newVersion = 0;
@@ -50,7 +53,8 @@ public class WorkingEnvironmentController(IOptionsSnapshot<YandexCloudSettings> 
             var fileData = new FileData { 
                 FileName = fileName, 
                 Id = uniqueId, 
-                Version = newVersion
+                Version = newVersion,
+                UserLogin = currentUser
             };
             
             await fileDataRepository.SaveFileDataAsync(fileData);
