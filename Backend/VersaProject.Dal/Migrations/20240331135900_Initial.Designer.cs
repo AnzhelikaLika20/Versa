@@ -12,7 +12,7 @@ using VersaProject.Dal.Infrastructure;
 namespace VersaProject.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240331000933_Initial")]
+    [Migration("20240331135900_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -163,6 +163,10 @@ namespace VersaProject.Dal.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserLogin")
                         .IsRequired()
                         .HasColumnType("text");
 

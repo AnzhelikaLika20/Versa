@@ -57,7 +57,8 @@ namespace VersaProject.Dal.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     FileName = table.Column<string>(type: "text", nullable: false),
-                    Version = table.Column<int>(type: "integer", nullable: false)
+                    Version = table.Column<int>(type: "integer", nullable: false),
+                    UserLogin = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
