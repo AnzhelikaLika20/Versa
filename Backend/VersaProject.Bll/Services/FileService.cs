@@ -88,7 +88,8 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
             FileName = fileName, 
             Id = uniqueId, 
             Version = newVersion,
-            UserLogin = currentUser
+            UserLogin = currentUser,
+            CreationTime = DateTime.Now
         };
             
         fileDataRepository.SaveFileDataAsync(fileData);
