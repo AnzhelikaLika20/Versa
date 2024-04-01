@@ -55,6 +55,16 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         return request;
     }
     
+    private DeleteObjectRequest CreateDeleteObjectRequest(string fileName)
+    {
+        DeleteObjectRequest request = new DeleteObjectRequest
+        {
+            BucketName = "versa",
+            Key = fileName,
+        };
+        return request;
+    }
+    
     public async Task<PutObjectResponse> SaveFile(IFormFile file, string currentUser)
     {
         AmazonS3Config configsS3 = GetS3Config();
@@ -81,7 +91,7 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
             UserLogin = currentUser
         };
             
-        await fileDataRepository.SaveFileDataAsync(fileData);
+        fileDataRepository.SaveFileDataAsync(fileData);
     }
 
     public async Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser)
@@ -97,6 +107,20 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         
         return response;
     }
+    
+    public async Task<DeleteObjectResponse> DeleteFile(string fileName, int version, string currentUser)
+    {
+        var fileId = $"{fileName}_{version}_{currentUser}";
+        AmazonS3Config configsS3 = GetS3Config();
+        var secretKey = cloudSettings.Value.SecretAccessKey;
+        var accessKey = cloudSettings.Value.AccessKeyId;
+        
+        AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
+        DeleteObjectRequest request = CreateDeleteObjectRequest(fileId);
+        DeleteObjectResponse response = await s3Client.DeleteObjectAsync(request);
+        
+        return response;
+    }
 
     public async Task<string> ReadReceivedFile(GetObjectResponse response)
     {
@@ -105,5 +129,10 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
             string fileContent = await reader.ReadToEndAsync();
             return fileContent;
         }
+    }
+
+    public async void DropFileVersion(string fileName, int version, string currentUser)
+    {
+        fileDataRepository.DropFileVersion(fileName, version, currentUser);
     }
 }

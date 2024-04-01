@@ -9,4 +9,6 @@ public interface IFileService
     public void StoreFileInfo(IFormFile file, string currentUser);
     public Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser);
     public Task<string> ReadReceivedFile(GetObjectResponse response);
+    public Task<DeleteObjectResponse> DeleteFile(string fileName, int version, string currentUser);
+    public void DropFileVersion(string fileName, int version, string currentUser);
 }

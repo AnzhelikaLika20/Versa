@@ -57,7 +57,34 @@ public class FilesController(IFileService fileService) : ControllerBase
                 return Ok(file);
             }
 
-            return StatusCode((int)response.Result.HttpStatusCode, "Failed to upload file");
+            return StatusCode((int)response.Result.HttpStatusCode, "Failed to download file");
+        }
+        catch (AmazonS3Exception ex)
+        {
+            return StatusCode((int)ex.StatusCode, $"Amazon S3 Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error: {ex.Message}");
+        }
+    }
+    
+    
+    [HttpDelete("DeleteFileVersion")]
+    public async Task<IActionResult> DeleteFileVersion(string fileName, int version)
+    {
+        try
+        {
+            var currentUser = User.Identity.Name;
+            var response = fileService.DeleteFile(fileName, version, currentUser);
+
+            if (response.Result.HttpStatusCode == HttpStatusCode.OK)
+            {
+                fileService.DropFileVersion(fileName, version, currentUser);
+                return Ok("File dropped successfully");
+            }
+
+            return StatusCode((int)response.Result.HttpStatusCode, "Failed to delete file");
         }
         catch (AmazonS3Exception ex)
         {
