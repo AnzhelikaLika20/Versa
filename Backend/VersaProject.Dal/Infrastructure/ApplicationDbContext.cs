@@ -11,5 +11,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<FileData>()
+            .Property(e => e.CreationTime)
+            .HasColumnType("TIMESTAMP");
     }
 }

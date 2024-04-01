@@ -17,8 +17,4 @@
       <ProjectReference Include="..\VersaProject.Dal\VersaProject.Dal.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
 </Project>
