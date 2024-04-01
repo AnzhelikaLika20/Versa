@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using VersaProject.Api;
+using VersaProject.Bll.Extensions;
 using VersaProject.Dal.Entities;
 using VersaProject.Dal.Extensions;
 using VersaProject.Dal.Infrastructure;
@@ -14,6 +14,7 @@ builder.Services.Configure<YandexCloudSettings>(builder.Configuration.GetSection
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
 var config = builder.Configuration.GetRequiredSection(nameof(DatabaseSettings)).Get<DatabaseSettings>()!;
 builder.Services.AddDalInfrastructure(config).AddDalRepositories();
+builder.Services.AddBllServices();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -26,15 +27,15 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
-        
+
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-        
+
 builder.Services.AddIdentityApiEndpoints<User>();
-        
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = true;
@@ -59,5 +60,5 @@ app.MapIdentityApi<User>();
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 await dbContext.Database.EnsureDeletedAsync();
-await dbContext.Database.MigrateAsync(); 
+await dbContext.Database.MigrateAsync();
 app.Run();

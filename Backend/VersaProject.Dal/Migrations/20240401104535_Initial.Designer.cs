@@ -12,7 +12,7 @@ using VersaProject.Dal.Infrastructure;
 namespace VersaProject.Dal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240331135900_Initial")]
+    [Migration("20240401104535_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -161,6 +161,9 @@ namespace VersaProject.Dal.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FileName")
                         .IsRequired()

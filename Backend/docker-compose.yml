@@ -1,6 +1,6 @@
 ﻿services:
   versaproject.api:
-    depends_on: 
+    depends_on:
       - database
     image: anjelikalika/versaproject.api
     env_file:
