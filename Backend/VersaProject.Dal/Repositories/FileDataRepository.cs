@@ -35,4 +35,13 @@ public class FileDataRepository(ApplicationDbContext context) : IFileDataReposit
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<FileData>> GetAllFiles(string currentUser)
+    {
+        var entities = await context.FilesData
+            .Where(e => e.UserLogin == currentUser)
+            .ToListAsync();
+
+        return entities;
+    }
 }

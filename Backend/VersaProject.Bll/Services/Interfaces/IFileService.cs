@@ -1,5 +1,6 @@
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
+using VersaProject.Dal.Entities;
 
 namespace VersaProject.Bll.Services.Interfaces;
 
@@ -11,4 +12,5 @@ public interface IFileService
     public Task<string> ReadReceivedFile(GetObjectResponse response);
     public Task<DeleteObjectResponse> DeleteFile(string fileName, int version, string currentUser);
     public void DropFileVersion(string fileName, int version, string currentUser);
+    public Task<List<FileData>> GetAllFiles(string currentUser);
 }

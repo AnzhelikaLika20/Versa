@@ -131,6 +131,11 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
             return fileContent;
         }
     }
+    
+    public async Task<List<FileData>> GetAllFiles(string currentUser)
+    {
+        return await fileDataRepository.GetAllFiles(currentUser);
+    }
 
     public async void DropFileVersion(string fileName, int version, string currentUser)
     {
