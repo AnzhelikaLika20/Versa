@@ -7,17 +7,97 @@ using VersaProject.Bll.Services.Interfaces;
 using VersaProject.Dal.Entities;
 using VersaProject.Dal.Repositories.Interfaces;
 using VersaProject.Dal.Settings;
+
 namespace VersaProject.Bll.Services;
 
-public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IFileDataRepository fileDataRepository) : IFileService
+public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IFileDataRepository fileDataRepository)
+    : IFileService
 {
+    public async Task<PutObjectResponse> SaveFile(IFormFile file, string currentUser)
+    {
+        var configsS3 = GetS3Config();
+        var secretKey = cloudSettings.Value.SecretAccessKey;
+        var accessKey = cloudSettings.Value.AccessKeyId;
+
+        var s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
+        var request = CreatePutObjectRequest(file, currentUser);
+        var response = await s3Client.PutObjectAsync(request);
+
+        return response;
+    }
+
+    public async void StoreFileInfo(IFormFile file, string currentUser)
+    {
+        var uniqueId = Guid.NewGuid().ToString();
+        var newVersion = GetLastFileVersion(file, currentUser).Result + 1;
+        var fileName = file.FileName;
+
+        var fileData = new FileData
+        {
+            FileName = fileName,
+            Id = uniqueId,
+            Version = newVersion,
+            UserLogin = currentUser,
+            CreationTime = DateTime.Now
+        };
+
+        fileDataRepository.SaveFileDataAsync(fileData);
+    }
+
+    public async Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser)
+    {
+        var fileId = $"{fileName}_{version}_{currentUser}";
+        var configsS3 = GetS3Config();
+        var secretKey = cloudSettings.Value.SecretAccessKey;
+        var accessKey = cloudSettings.Value.AccessKeyId;
+
+        var s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
+        var request = CreateGetObjectRequest(fileId);
+        var response = await s3Client.GetObjectAsync(request);
+
+        return response;
+    }
+
+    public async Task<DeleteObjectResponse> DeleteFile(string fileName, int version, string currentUser)
+    {
+        var fileId = $"{fileName}_{version}_{currentUser}";
+        var configsS3 = GetS3Config();
+        var secretKey = cloudSettings.Value.SecretAccessKey;
+        var accessKey = cloudSettings.Value.AccessKeyId;
+
+        var s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
+        var request = CreateDeleteObjectRequest(fileId);
+        var response = await s3Client.DeleteObjectAsync(request);
+
+        return response;
+    }
+
+    public async Task<string> ReadReceivedFile(GetObjectResponse response)
+    {
+        using (var reader = new StreamReader(response.ResponseStream, Encoding.UTF8))
+        {
+            var fileContent = await reader.ReadToEndAsync();
+            return fileContent;
+        }
+    }
+
+    public async Task<List<FileData>> GetAllFiles(string currentUser)
+    {
+        return await fileDataRepository.GetAllFiles(currentUser);
+    }
+
+    public async void DropFileVersion(string fileName, int version, string currentUser)
+    {
+        fileDataRepository.DropFileVersion(fileName, version, currentUser);
+    }
+
     private AmazonS3Config GetS3Config()
     {
-        AmazonS3Config configsS3 = new AmazonS3Config
+        var configsS3 = new AmazonS3Config
         {
             ServiceURL = "https://s3.yandexcloud.net",
             ForcePathStyle = true,
-            SignatureVersion = "2" 
+            SignatureVersion = "2"
         };
         return configsS3;
     }
@@ -35,7 +115,7 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
     {
         var newVersion = GetLastFileVersion(file, currentUser).Result + 1;
         var fileName = $"{file.FileName}_{newVersion}_{currentUser}";
-        PutObjectRequest request = new PutObjectRequest
+        var request = new PutObjectRequest
         {
             BucketName = "versa",
             Key = fileName,
@@ -44,101 +124,24 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         };
         return request;
     }
-    
+
     private GetObjectRequest CreateGetObjectRequest(string fileName)
     {
-        GetObjectRequest request = new GetObjectRequest
+        var request = new GetObjectRequest
         {
             BucketName = "versa",
-            Key = fileName,
+            Key = fileName
         };
         return request;
     }
-    
+
     private DeleteObjectRequest CreateDeleteObjectRequest(string fileName)
     {
-        DeleteObjectRequest request = new DeleteObjectRequest
+        var request = new DeleteObjectRequest
         {
             BucketName = "versa",
-            Key = fileName,
+            Key = fileName
         };
         return request;
-    }
-    
-    public async Task<PutObjectResponse> SaveFile(IFormFile file, string currentUser)
-    {
-        AmazonS3Config configsS3 = GetS3Config();
-        var secretKey = cloudSettings.Value.SecretAccessKey;
-        var accessKey = cloudSettings.Value.AccessKeyId;
-        
-        AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
-        PutObjectRequest request = CreatePutObjectRequest(file, currentUser);
-        PutObjectResponse response = await s3Client.PutObjectAsync(request);
-        
-        return response;
-    }
-
-    public async void StoreFileInfo(IFormFile file, string currentUser)
-    {
-        string uniqueId = Guid.NewGuid().ToString();
-        var newVersion = GetLastFileVersion(file, currentUser).Result + 1;
-        var fileName = file.FileName;
-        
-        var fileData = new FileData { 
-            FileName = fileName, 
-            Id = uniqueId, 
-            Version = newVersion,
-            UserLogin = currentUser,
-            CreationTime = DateTime.Now
-        };
-            
-        fileDataRepository.SaveFileDataAsync(fileData);
-    }
-
-    public async Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser)
-    {
-        var fileId = $"{fileName}_{version}_{currentUser}";
-        AmazonS3Config configsS3 = GetS3Config();
-        var secretKey = cloudSettings.Value.SecretAccessKey;
-        var accessKey = cloudSettings.Value.AccessKeyId;
-        
-        AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
-        GetObjectRequest request = CreateGetObjectRequest(fileId);
-        GetObjectResponse response = await s3Client.GetObjectAsync(request);
-        
-        return response;
-    }
-    
-    public async Task<DeleteObjectResponse> DeleteFile(string fileName, int version, string currentUser)
-    {
-        var fileId = $"{fileName}_{version}_{currentUser}";
-        AmazonS3Config configsS3 = GetS3Config();
-        var secretKey = cloudSettings.Value.SecretAccessKey;
-        var accessKey = cloudSettings.Value.AccessKeyId;
-        
-        AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
-        DeleteObjectRequest request = CreateDeleteObjectRequest(fileId);
-        DeleteObjectResponse response = await s3Client.DeleteObjectAsync(request);
-        
-        return response;
-    }
-
-    public async Task<string> ReadReceivedFile(GetObjectResponse response)
-    {
-        using (StreamReader reader = new StreamReader(response.ResponseStream, Encoding.UTF8))
-        {
-            string fileContent = await reader.ReadToEndAsync();
-            return fileContent;
-        }
-    }
-    
-    public async Task<List<FileData>> GetAllFiles(string currentUser)
-    {
-        return await fileDataRepository.GetAllFiles(currentUser);
-    }
-
-    public async void DropFileVersion(string fileName, int version, string currentUser)
-    {
-        fileDataRepository.DropFileVersion(fileName, version, currentUser);
     }
 }

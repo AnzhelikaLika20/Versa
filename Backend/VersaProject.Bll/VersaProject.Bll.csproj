@@ -7,14 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="AWSSDK.S3" Version="3.7.307.6" />
-      <PackageReference Include="MediatR" Version="12.2.0" />
-      <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+        <PackageReference Include="AWSSDK.S3" Version="3.7.307.6"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="MediatR.Contracts" Version="2.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VersaProject.Dal\VersaProject.Dal.csproj" />
+        <ProjectReference Include="..\VersaProject.Dal\VersaProject.Dal.csproj"/>
     </ItemGroup>
 
 </Project>
