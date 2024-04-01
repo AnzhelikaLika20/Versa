@@ -10,10 +10,10 @@ public record DatabaseSettings
 
     public string ConnectionString =>
         $"""
-User ID={UserId};
-Password={Password};
-Host={Host};
-DataBase={DataBase};
-{Options};
-""";
+         User ID={UserId};
+         Password={Password};
+         Host={Host};
+         DataBase={DataBase};
+         {Options};
+         """;
 }
