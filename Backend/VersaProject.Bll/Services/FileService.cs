@@ -1,3 +1,4 @@
+using System.Text;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,16 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         return request;
     }
     
+    private GetObjectRequest CreateGetObjectRequest(string fileName)
+    {
+        GetObjectRequest request = new GetObjectRequest
+        {
+            BucketName = "versa",
+            Key = fileName,
+        };
+        return request;
+    }
+    
     public async Task<PutObjectResponse> SaveFile(IFormFile file, string currentUser)
     {
         AmazonS3Config configsS3 = GetS3Config();
@@ -71,5 +82,28 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         };
             
         await fileDataRepository.SaveFileDataAsync(fileData);
+    }
+
+    public async Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser)
+    {
+        var fileId = $"{fileName}_{version}_{currentUser}";
+        AmazonS3Config configsS3 = GetS3Config();
+        var secretKey = cloudSettings.Value.SecretAccessKey;
+        var accessKey = cloudSettings.Value.AccessKeyId;
+        
+        AmazonS3Client s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
+        GetObjectRequest request = CreateGetObjectRequest(fileId);
+        GetObjectResponse response = await s3Client.GetObjectAsync(request);
+        
+        return response;
+    }
+
+    public async Task<string> ReadReceivedFile(GetObjectResponse response)
+    {
+        using (StreamReader reader = new StreamReader(response.ResponseStream, Encoding.UTF8))
+        {
+            string fileContent = await reader.ReadToEndAsync();
+            return fileContent;
+        }
     }
 }

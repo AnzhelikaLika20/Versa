@@ -42,4 +42,30 @@ public class FilesController(IFileService fileService) : ControllerBase
             return StatusCode(500, $"Error: {ex.Message}");
         }
     }
+
+    [HttpGet("GetFileByVersion")]
+    public async Task<IActionResult> GetFileByVersion(string fileName, int version)
+    {
+        try
+        {
+            var currentUser = User.Identity.Name;
+            var response = fileService.GetFile(fileName, version, currentUser);
+
+            if (response.Result.HttpStatusCode == HttpStatusCode.OK)
+            {
+                var file = await fileService.ReadReceivedFile(response.Result);
+                return Ok(file);
+            }
+
+            return StatusCode((int)response.Result.HttpStatusCode, "Failed to upload file");
+        }
+        catch (AmazonS3Exception ex)
+        {
+            return StatusCode((int)ex.StatusCode, $"Amazon S3 Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error: {ex.Message}");
+        }
+    }
 }
