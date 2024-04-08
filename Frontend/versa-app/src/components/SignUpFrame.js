@@ -5,7 +5,6 @@ import {Helmet} from 'react-helmet'
 import './../css/SignUpFrame.css'
 import Button from "./Button";
 import close from './../img/ellipse.png'
-import background from './../img/rectangle.png'
 import Image from "./Image";
 import Input from "./Input";
 
@@ -40,7 +39,7 @@ class SignUpFrame extends React.Component {
                         <span className="sign-up-frame-text7">
             <span>Create your own personal account</span>
           </span>
-                        <Button text="Continue" backgroundColor="rgba(254, 114, 101)" id="sign-up-frame-button"/>
+                        <Button text="Sign up" backgroundColor="rgba(254, 114, 101)" id="sign-up-frame-button"/>
                     </div>
                 </div>
             </div>

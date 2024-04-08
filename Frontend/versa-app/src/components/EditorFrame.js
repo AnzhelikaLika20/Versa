@@ -30,7 +30,7 @@ class EditorFrame extends Component {
                             className="editor-frame-rectangle6"
                         />
                         <span className="editor-frame-text2">
-                            <span>Init document init init in</span>
+                            <span>Init text</span>
                         </span>
                     </div>
                     <span className="editor-frame-snapshots">
