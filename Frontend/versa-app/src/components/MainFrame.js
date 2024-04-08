@@ -6,6 +6,8 @@ import Button from './Button'
 import SignInFrame from "./SignInFrame";
 import SignUpFrame from "./SignUpFrame";
 import EditorFrame from "./EditorFrame";
+import editor from './../img/versa-editor.png'
+
 
 class MainFrame extends React.Component {
     constructor(props) {
@@ -13,7 +15,7 @@ class MainFrame extends React.Component {
         this.state = {
             isSignInOpen: false,
             isSignUpOpen: false,
-            isEditorOpen: true
+            isEditorOpen: false
         };
         this.openSignIn = this.openSignIn.bind(this)
         this.closeSignIn = this.closeSignIn.bind(this)
@@ -55,7 +57,12 @@ class MainFrame extends React.Component {
                 </Helmet>
                 <div className="frame1-frame1">
                     <span className="frame1-slogan">Make your life versatile</span>
-                    <div className="frame1-feature-picture"></div>
+                    <div className="frame1-feature-picture">
+                        <img 
+                            src={editor}
+                            className="main-frame-editor"
+                        />
+                    </div>
                     <div className="frame1-fish">
           <span className="frame1-text">
             <span className="frame1-text1">
