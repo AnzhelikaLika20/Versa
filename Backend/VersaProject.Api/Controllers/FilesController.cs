@@ -7,11 +7,11 @@ using VersaProject.Bll.Services.Interfaces;
 namespace VersaProject.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/")]
 [Authorize]
 public class FilesController(IFileService fileService) : ControllerBase
 {
-    [HttpPost("UploadFile")]
+    [HttpPost("upload-file")]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         try
@@ -37,7 +37,7 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("GetFileByVersion")]
+    [HttpGet("get-file")]
     public async Task<IActionResult> GetFileByVersion(string fileName, int version)
     {
         try
@@ -64,7 +64,7 @@ public class FilesController(IFileService fileService) : ControllerBase
     }
 
 
-    [HttpDelete("DeleteFileVersion")]
+    [HttpDelete("delete-file")]
     public async Task<IActionResult> DeleteFileVersion(string fileName, int version)
     {
         try
@@ -90,7 +90,7 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("GetAllFiles")]
+    [HttpGet("get-all-files")]
     public async Task<IActionResult> GetAllFiles()
     {
         var currentUser = User.Identity.Name;
