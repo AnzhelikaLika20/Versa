@@ -21,6 +21,7 @@
 }
 
 .frame1-slogan {
+    user-select: none;
     top: 210px;
     left: var(--dl-space-space-twounits);
     color: rgb(255, 255, 255);
@@ -38,6 +39,8 @@
 }
 
 .frame1-feature-picture {
+    pointer-events: none;
+    user-select: none;
     top: 433px;
     flex: 0 0 auto;
     left: 825px;
@@ -57,6 +60,7 @@
     height: 367px;
     border: 3px solid rgba(217, 217, 217, 0.42);
     border-radius: 30px;
+    pointer-events: none;
 }
 
 .frame1-fish {
@@ -97,6 +101,7 @@
 }
 
 .frame1-sign-in {
+    user-select: none;
     top: 35px;
     left: 861px;
     color: rgb(255, 255, 255, 1);
@@ -114,6 +119,7 @@
 }
 
 .frame1-sign-up {
+    user-select: none;
     top: 35px;
     left: 1130px;
     color: rgb(255, 255, 255, 1);

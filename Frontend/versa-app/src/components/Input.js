@@ -6,6 +6,24 @@ const validateEmail = (email) => {
     ) !== null;
 };
 
+const validatePassword = (password) => {
+    let hasUpper = false
+    let hasLower = false
+    let hasDigit = false
+    let hasSpecial = false
+    if (password.length < 10) return false
+    const specialAlphabet = "!@#$%^&*()_-+=<>?/,.{}[]|'`~:;\""
+    
+    for (let i = 0; i < password.length; i++) {
+        if (password[i] >= 'A' && password[i] <= 'Z') hasUpper = true
+        if (password[i] >= 'a' && password[i] <= 'z') hasLower = true
+        if (password[i] >= '0' && password[i] <= '9') hasDigit = true
+        if (specialAlphabet.includes(password[i])) hasSpecial = true
+    }
+    
+    return hasUpper && hasLower && hasDigit && hasSpecial
+}
+
 class Input extends React.Component {
     constructor(props) {
         super(props);
@@ -56,10 +74,10 @@ class Input extends React.Component {
             return
         }
         let status
-        if (event.target.value.length < 10) {
-            status = true
-        } else {
+        if (validatePassword(event.target.value)) {
             status = false
+        } else {
+            status = true
         }
         this.setState({
             isWrongPassword: status
@@ -98,7 +116,7 @@ class Input extends React.Component {
                     </span>
                     {this.state.isWrongPassword && (
                         <span className={errorClassName}>
-                            Password must contain at least 10 characters
+                            Password must be contain at least 10 characters, 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character
                         </span>
                     )}
                 </div>
