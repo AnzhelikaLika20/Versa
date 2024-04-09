@@ -1,7 +1,7 @@
 .error-password {
     color: rgba(254, 114, 101);
-    top: 390px;
-    left: 140px;
+    top: 370px;
+    left: 70px;
     position: absolute;
     font-size: 20px;
     font-style: normal;
@@ -15,7 +15,7 @@
 
 .error-email {
     color: rgba(254, 114, 101);
-    top: 350px;
+    top: 340px;
     left: 250px;
     position: absolute;
     font-size: 20px;
