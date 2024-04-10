@@ -1,62 +1,31 @@
 import {Helmet} from 'react-helmet'
+import { useHistory } from 'react-router-dom';
 import React from 'react'
 
 import './../css/MainFrame.css'
 import Button from './Button'
-import SignInFrame from "./SignInFrame";
-import SignUpFrame from "./SignUpFrame";
-import EditorFrame from "./EditorFrame";
+import editor from './../img/versa-editor.png'
 
-class MainFrame extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isSignInOpen: false,
-            isSignUpOpen: false,
-            isEditorOpen: true
-        };
-        this.openSignIn = this.openSignIn.bind(this)
-        this.closeSignIn = this.closeSignIn.bind(this)
-        this.openSignUp = this.openSignUp.bind(this)
-        this.closeSignUp = this.closeSignUp.bind(this)
-    }
 
-    openSignIn() {
-        this.setState({isSignInOpen: true})
-    }
-    
-    closeSignIn() {
-        this.setState({isSignInOpen: false})
-        
-    }
+const MainFrame = () => {
+    const history = useHistory();
 
-    openSignUp() {
-        this.setState({isSignUpOpen: true})
-    }
-
-    closeSignUp() {
-        this.setState({isSignUpOpen: false})
-    }
-
-    render() {
-        if (this.state.isEditorOpen)
-            return <EditorFrame />
-        
-        if (this.state.isSignInOpen)
-            return <SignInFrame onClick={() => this.closeSignIn()}/>
-        
-        if (this.state.isSignUpOpen)
-            return <SignUpFrame onClick={() => this.closeSignUp()}/>
-        
-        return (
-            <div className="frame1-container">
-                <Helmet>
-                    <title>Versa</title>
-                </Helmet>
-                <div className="frame1-frame1">
-                    <span className="frame1-slogan">Make your life versatile</span>
-                    <div className="frame1-feature-picture"></div>
-                    <div className="frame1-fish">
+    return (
+        <div className="frame1-container">
+            <Helmet>
+                <title>Versa</title>
+            </Helmet>
+            <div className="frame1-frame1">
+                <span className="frame1-slogan">Make your life versatile</span>
+                <div className="frame1-feature-picture">
+                    <img
+                        src={editor}
+                        alt="Versa editor"
+                        draggable="false"
+                        className="main-frame-editor"
+                    />
+                </div>
+                <div className="frame1-fish">
           <span className="frame1-text">
             <span className="frame1-text1">
               Enhance your ability to create with
@@ -68,15 +37,14 @@ class MainFrame extends React.Component {
             </span>
             <span className="frame1-text1"><i>versa editor</i></span>
           </span>
-                    </div>
-                    <Button text="Sign in" backgroundColor="rgb(81, 208, 210)" id="frame1-sign-in"
-                            onClick={() => this.openSignIn()}/>
-                    <Button text="Sign up" backgroundColor="rgba(254, 114, 101, 1)" id="frame1-sign-up"
-                            onClick={() => this.openSignUp()}/>
                 </div>
+                <Button text="Sign in" backgroundColor="rgb(81, 208, 210)" id="frame1-sign-in"
+                        onClick={() => history.push('/signin')}/>
+                <Button text="Sign up" backgroundColor="rgba(254, 114, 101, 1)" id="frame1-sign-up"
+                        onClick={() => history.push('/signup')}/>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default MainFrame

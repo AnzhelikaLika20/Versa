@@ -3,6 +3,11 @@
     depends_on:
       - database
     image: anjelikalika/versaproject.api
+    restart: 
+      always
+    networks: 
+      - app-network
+      - versa-network
     env_file:
       - .env
     environment:
@@ -11,9 +16,39 @@
       - "8080:8080"
   database:
     image: postgres
+    networks: 
+      - versa-network
     environment:
       POSTGRES_USER: ${DATABASESETTINGS__USERID}
       POSTGRES_PASSWORD: ${DATABASESETTINGS__PASSWORD}
       POSTGRES_DB: ${DATABASESETTINGS__DATABASE}
     ports:
       - "15432:5432"
+  web:
+    depends_on: 
+      - versaproject.api
+    image: versa-app-web
+    restart: 
+      always
+    networks:
+      - app-network
+    build:
+      context: .
+      dockerfile: ../Frontend/versa-app/Dockerfile
+    ports:
+      - "3000:3000"
+  nginx:
+    networks:
+      - app-network
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "81:81"
+      - "443:443"
+
+networks:
+  app-network:
+    driver: bridge
+  versa-network:
+    driver: bridge
