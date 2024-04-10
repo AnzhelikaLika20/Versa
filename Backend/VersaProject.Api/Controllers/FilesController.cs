@@ -7,7 +7,7 @@ using VersaProject.Bll.Services.Interfaces;
 namespace VersaProject.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/")]
+[Route("api/v1/files")]
 [Authorize]
 public class FilesController(IFileService fileService) : ControllerBase
 {
