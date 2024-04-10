@@ -53,9 +53,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app
+    .MapGroup("api/v1/")
+    .MapIdentityApi<User>();
+
 app.UseAuthorization();
 app.MapControllers();
-app.MapIdentityApi<User>();
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
