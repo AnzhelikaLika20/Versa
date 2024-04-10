@@ -17,7 +17,7 @@ const SignUpFrame = () => {
         console.log(email)
         console.log(password)
         try {
-            const response = await axios.post('http://localhost:8080/register', {
+            const response = await axios.post('http://localhost/api/v1/register', {
                 email: email,
                 password: password
             });
