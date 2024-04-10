@@ -11,7 +11,7 @@ namespace VersaProject.Api.Controllers;
 [Authorize]
 public class FilesController(IFileService fileService) : ControllerBase
 {
-    [HttpPost("upload-file")]
+    [HttpPost]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         try
@@ -90,7 +90,7 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("get-all-files")]
+    [HttpGet]
     public async Task<IActionResult> GetAllFiles()
     {
         var currentUser = User.Identity.Name;

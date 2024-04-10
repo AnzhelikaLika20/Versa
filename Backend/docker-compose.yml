@@ -1,8 +1,8 @@
 ﻿services:
-  versaproject.api:
+  api:
     depends_on:
       - database
-    image: anjelikalika/versaproject.api
+    image: anjelikalika/versaproject
     restart: 
       always
     networks: 
@@ -26,15 +26,14 @@
       - "15432:5432"
   web:
     depends_on: 
-      - versaproject.api
-    image: versa-app-web
+      - api
     restart: 
       always
     networks:
       - app-network
     build:
-      context: .
-      dockerfile: ../Frontend/versa-app/Dockerfile
+      context: ../Frontend/versa-app
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
   nginx:
