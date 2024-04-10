@@ -93,7 +93,7 @@ class Input extends React.Component {
     }
 
     render() {
-        const {type, placeholder, className, errorClassName} = this.props;
+        const {type, placeholder, className, errorClassName, onChange} = this.props;
         const hoverStyle = {
             cursor: this.state.isHovered ? 'pointer' : 'default',
         }
@@ -104,7 +104,7 @@ class Input extends React.Component {
                     <input type={this.state.toShow ? "text" : "password"}
                            placeholder={placeholder}
                            className={className}
-                           onChange={this.handlePasswordChange}
+                           onChange={onChange}
                     />
                     <span id="togglePassword"
                           onClick={this.handleClick}
@@ -127,7 +127,7 @@ class Input extends React.Component {
                 <input type={type}
                        placeholder={placeholder}
                        className={className}
-                       onChange={this.handleEmailChange}
+                       onChange={onChange}
                 />
                 {this.state.isWrongEmail && (
                     <span className={errorClassName}>
