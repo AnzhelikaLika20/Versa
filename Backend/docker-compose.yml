@@ -44,9 +44,8 @@
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "81:81"
+      - "80:80"
       - "443:443"
-
 networks:
   app-network:
     driver: bridge
