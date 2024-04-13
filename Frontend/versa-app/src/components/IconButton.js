@@ -5,11 +5,9 @@ class IconButton extends Component {
         super(props);
         this.state = {
             isHovered: false,
-            isClicked: false
         }
         this.handleMouseEnter = this.handleMouseEnter.bind(this)
         this.handleMouseLeave = this.handleMouseLeave.bind(this)
-        this.handleMouseClick = this.handleMouseClick.bind(this)
     }
 
     handleMouseEnter = () => {
@@ -19,26 +17,11 @@ class IconButton extends Component {
     handleMouseLeave = () => {
         this.setState({
             isHovered: false,
-            isClicked: false
         })
     }
 
-    handleMouseClick = () => {
-        this.setState({isClicked: true})
-        setTimeout(() => {
-            this.setState({
-                isClicked: false
-            })
-        }, 350)
-    }
-    
-    getColor(color) {
-        if (color === "red")
-            return 'rgb(254, 114, 101)';
-        return 'rgb(81, 208, 210)'
-    }
     render() {
-        const { icon: Icon, className, color } = this.props;
+        const { icon: Icon, className, onClick } = this.props;
         const hoveredStyle = {
             cursor: this.state.isHovered ? 'pointer' : 'default',
         }
@@ -48,9 +31,8 @@ class IconButton extends Component {
                 className={className}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleMouseClick}
+                onClick={onClick}
                 style={hoveredStyle}
-                color={this.state.isClicked ? this.getColor(color) : 'rgba(217, 217, 217, 1)'}
             />
         );
     }
