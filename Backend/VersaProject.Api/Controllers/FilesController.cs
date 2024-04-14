@@ -27,6 +27,7 @@ public class FilesController(IFileService fileService) : ControllerBase
                 transaction.Complete();
                 return Ok("File uploaded successfully");
             }
+
             return StatusCode((int)response.HttpStatusCode, "Failed to upload file");
         }
         catch (AmazonS3Exception ex)
@@ -74,10 +75,7 @@ public class FilesController(IFileService fileService) : ControllerBase
             var currentUser = User.Identity.Name;
             var response = await fileService.DeleteFile(fileName, version, currentUser);
 
-            if (response.HttpStatusCode == HttpStatusCode.OK)
-            {
-                return Ok("File dropped successfully");
-            }
+            if (response.HttpStatusCode == HttpStatusCode.OK) return Ok("File dropped successfully");
 
             return StatusCode((int)response.HttpStatusCode, "Failed to delete file");
         }

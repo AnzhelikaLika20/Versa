@@ -1,16 +1,14 @@
-using System.Security.Claims;
 using System.Transactions;
 using Microsoft.AspNetCore.Identity;
 using VersaProject.Bll.Services.Interfaces;
 using VersaProject.Dal.Entities;
-using VersaProject.Dal.Repositories.Interfaces;
 
 namespace VersaProject.Bll.Services;
 
 public class AuthService(
-    IFileService fileService, 
+    IFileService fileService,
     UserManager<User> userManager
-    ) : IAuthService
+) : IAuthService
 {
     public async Task DeleteAccount(string? currentUser)
     {
