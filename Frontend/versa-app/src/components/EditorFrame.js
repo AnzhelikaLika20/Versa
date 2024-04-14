@@ -7,9 +7,11 @@ import {RiDeleteBin2Fill} from "react-icons/ri"; // <RiDeleteBin2Fill /> // dele
 import {CgProfile} from "react-icons/cg"; // <CgProfile /> // profile
 import TextInput from "./TextInput";
 import IconButton from "./IconButton"
+import Versions from "./Versions";
 import {useHistory} from "react-router-dom";
 import {useState} from 'react'
 import axios from "axios";
+import versions from "./Versions";
 
 axios.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
@@ -19,6 +21,7 @@ axios.interceptors.request.use(config => {
 const EditorFrame = () => {
     const history = useHistory();
     const [text, setText] = useState('');
+    const [versions, setVersions] = useState([])
 
     const loadFile = async () => {
         console.log(text)
@@ -29,8 +32,10 @@ const EditorFrame = () => {
             'Content-Type': 'multipart/form-data'
         }
         try {
-            const response = await axios.post('http://localhost/api/v1/files', formData, { headers })
+            await axios.post('http://localhost/api/v1/files', formData, { headers })
+            let response = await axios.get('http://localhost/api/v1/files')
             console.log(response.data)
+            setVersions(response.data)
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log(error.response)
@@ -40,11 +45,13 @@ const EditorFrame = () => {
 
     const deleteFile = async () => {
         const fileName = 'file.txt'
+        const version = 1
+        console.log(version)
         try {
-            const response = await axios.delete(`http://localhost/api/v1/files/${fileName}`, {
-                version: 2
-            })
+            await axios.delete(`http://localhost/api/v1/files/${fileName}?version=${version}`)
+            let response = await axios.get('http://localhost/api/v1/files')
             console.log(response.data)
+            setVersions(response.data)
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log(error.response)
@@ -67,12 +74,7 @@ const EditorFrame = () => {
                     />
                 </div>
                 <div className="editor-frame-versions">
-                    <div
-                        className="editor-frame-rectangle6"
-                    />
-                    <span className="editor-frame-text2">
-                            <span>Init text</span>
-                        </span>
+                    <Versions versions={versions}/>
                 </div>
 
                 <span className="editor-frame-snapshots">
