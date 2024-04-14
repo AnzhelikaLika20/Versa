@@ -1,10 +1,6 @@
-using System.Net;
-using Amazon.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using VersaProject.Bll.Services.Interfaces;
-using VersaProject.Dal.Infrastructure;
 
 namespace VersaProject.Api.Controllers;
 

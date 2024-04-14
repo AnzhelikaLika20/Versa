@@ -69,10 +69,9 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         var s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
         var request = CreateDeleteObjectRequest(fileId);
         var response = await s3Client.DeleteObjectAsync(request);
-        
-        if(response.HttpStatusCode == HttpStatusCode.OK)
-            await DropFileVersion(fileName, version, currentUser);
 
+        if (response.HttpStatusCode == HttpStatusCode.NoContent)
+            await DropFileVersion(fileName, version, currentUser);
 
         return response;
     }
@@ -96,6 +95,15 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         await fileDataRepository.DropFileVersion(fileName, version, currentUser);
     }
 
+    public async Task<int> GetLastFileVersion(IFormFile file, string currentUser)
+    {
+        var fileName = file.FileName;
+        var latestFileVersion = await fileDataRepository.GetLatestFileData(fileName, currentUser);
+        if (latestFileVersion == null)
+            return 0;
+        return latestFileVersion.Version;
+    }
+
     private AmazonS3Config GetS3Config()
     {
         var configsS3 = new AmazonS3Config
@@ -107,16 +115,10 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         return configsS3;
     }
 
-    public async Task<int> GetLastFileVersion(IFormFile file, string currentUser)
-    {
-        var fileName = file.FileName;
-        var latestFileVersion = await fileDataRepository.GetLatestFileData(fileName, currentUser);
-        if (latestFileVersion == null)
-            return 0;
-        return latestFileVersion.Version;
-    }
-
-    private async Task<PutObjectRequest> CreatePutObjectRequest(IFormFile file, string currentUser)
+    private async Task<PutObjectRequest> CreatePutObjectRequest(
+        IFormFile file,
+        string currentUser
+    )
     {
         var newVersion = await GetLastFileVersion(file, currentUser);
         var fileName = $"{file.FileName}_{newVersion}_{currentUser}";
