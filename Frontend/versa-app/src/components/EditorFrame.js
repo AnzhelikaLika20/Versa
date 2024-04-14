@@ -8,10 +8,35 @@ import {CgProfile} from "react-icons/cg"; // <CgProfile /> // profile
 import TextInput from "./TextInput";
 import IconButton from "./IconButton"
 import {useHistory} from "react-router-dom";
+import {useState} from 'react'
+import axios from "axios";
 
+axios.interceptors.request.use(config => {
+    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
+    return config;
+});
 
 const EditorFrame = () => {
     const history = useHistory();
+    const [text, setText] = useState('');
+
+    const loadFile = async () => {
+        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        let formData = new FormData();
+        formData.append("file", blob, "file.txt");
+        try {
+            const response = await axios.post('http://localhost/api/v1/files', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log(response.data)
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log(error.response)
+            }
+        }
+    }
 
     return (
         <div className="editor-frame-container">
@@ -24,6 +49,7 @@ const EditorFrame = () => {
                     <TextInput
                         placeholder={"Type your text here..."}
                         className={"editor-frame-text"}
+                        onChange={(e) => setText(e.target.value)}
                     />
                 </div>
                 <div className="editor-frame-versions">
@@ -56,6 +82,8 @@ const EditorFrame = () => {
                 <IconButton
                     icon={FaCameraRetro}
                     className="snapshot-icon"
+                    onChange={(e) => setText(e.target.value)}
+                    onClick={loadFile}
                 />
 
                 <IconButton

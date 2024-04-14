@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { useHistory } from 'react-router-dom';
+import React, {useState} from 'react';
+import {Helmet} from 'react-helmet';
+import {useHistory} from 'react-router-dom';
 import './../css/SignUpFrame.css';
 import Button from "./Button";
 import close from './../img/ellipse.png';
@@ -10,7 +10,7 @@ import {validateEmail, validatePassword} from "./Validator"
 import axios from "axios";
 
 axios.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${localStorage['token']}`;
+    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
     return config;
 });
 const SignUpFrame = () => {
@@ -19,6 +19,8 @@ const SignUpFrame = () => {
     const [password, setPassword] = useState('');
     const [isWrongEmail, setEmailFlag] = useState(false)
     const [isWrongPassword, setPasswordFlag] = useState(false)
+    const [authError, setAuthError] = useState('')
+    const [isWrongAuth, setAuthFlag] = useState(false)
     const handleEmailChange = (email) => {
         if (email.length === 0) {
             setEmailFlag(false)
@@ -34,15 +36,17 @@ const SignUpFrame = () => {
         }
         setPasswordFlag(!validatePassword(password))
     }
-    
+
     const registerUser = async () => {
-        handleEmailChange(email)
-        handlePasswordChange(password)
-        if (isWrongEmail || isWrongPassword) return
+        await setAuthFlag(false)
+        await handleEmailChange(email)
+        await handlePasswordChange(password)
+        const isEmailValid = validateEmail(email);
+        const isPasswordValid = validatePassword(password);
+        if (!isEmailValid || !isPasswordValid) return
+        let response
         try {
-            console.log(email)
-            console.log(password)
-            let response = await axios.post('http://localhost/api/v1/register', {
+            response = await axios.post('http://localhost/api/v1/register', {
                 email: email,
                 password: password
             });
@@ -50,10 +54,16 @@ const SignUpFrame = () => {
                 email: email,
                 password: password
             })
-            localStorage.setItem('token', response.data['accessToken'])
+            localStorage.setItem('accessToken', response.data['accessToken'])
+            localStorage.setItem('refreshToken', response.data['refreshToken'])
             history.push('/editor')
         } catch (error) {
-            console.error('Registration failed:', error);
+            if (axios.isAxiosError(error) && error.response &&
+                error.response.data.errors &&
+                error.response.data.errors.hasOwnProperty('DuplicateEmail')) {
+                setAuthError(error.response.data.errors['DuplicateEmail'][0]);
+                setAuthFlag(true);
+            }
         }
     };
 
@@ -98,11 +108,16 @@ const SignUpFrame = () => {
                     {isWrongEmail && (
                         <span className={"error-email"}>
                             Email must be correct
-                    </span>
+                        </span>
                     )}
                     {isWrongPassword && (
                         <span className={"error-password"}>
                             Password must contain at least 10 characters, 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character
+                        </span>
+                    )}
+                    {isWrongAuth && (
+                        <span className={"error-auth"}>
+                            {authError}
                         </span>
                     )}
                 </div>

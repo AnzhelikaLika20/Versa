@@ -1,25 +1,29 @@
 import React from 'react'
 import {Helmet} from 'react-helmet'
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import './../css/SignInFrame.css'
 import Button from "./Button";
 import close from './../img/ellipse.png'
 import Image from "./Image";
 import Input from "./Input";
-import { useState } from 'react'
+import {useState} from 'react'
 import {validateEmail, validatePassword} from "./Validator"
 import axios from "axios"
 
+
 axios.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${localStorage['token']}`;
+    config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
     return config;
 });
+
+
 const SignInFrame = () => {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isWrongEmail, setEmailFlag] = useState(false)
     const [isWrongPassword, setPasswordFlag] = useState(false)
+    const [isWrongAuth, setAuthFlag] = useState(false)
     const handleEmailChange = (email) => {
         if (email.length === 0) {
             setEmailFlag(false)
@@ -37,21 +41,29 @@ const SignInFrame = () => {
     }
 
     const registerUser = async () => {
+        setAuthFlag(false)
         handleEmailChange(email)
         handlePasswordChange(password)
-        if (isWrongEmail || isWrongPassword) return
+        const isEmailValid = validateEmail(email);
+        const isPasswordValid = validatePassword(password);
+        if (!isEmailValid || !isPasswordValid) return
         try {
             const response = await axios.post('http://localhost/api/v1/login', {
                 email: email,
                 password: password
             })
-            localStorage.setItem('token', response.data['accessToken'])
+            localStorage.setItem('accessToken', response.data['accessToken'])
+            localStorage.setItem('refreshToken', response.data['refreshToken'])
             history.push('/editor')
         } catch (error) {
-            console.error('Registration failed:', error);
+            if (axios.isAxiosError(error) && error.response &&
+                error.response.status === 401) {
+                console.log(error.response)
+                setAuthFlag(true)
+            }
         }
     };
-        
+
     return (
         <div className="sign-in-frame-container">
             <Helmet>
@@ -63,17 +75,17 @@ const SignInFrame = () => {
 
                 <div className="sign-in-frame-form">
                     <Input type={"email"}
-                           placeholder={"email"} 
+                           placeholder={"email"}
                            className={"sign-in-frame-email"}
                            onChange={(e) => setEmail(e.target.value)}
                     />
 
-                    <Input type={"password"} 
-                           placeholder={"password"} 
-                           className={"sign-in-frame-password"} 
+                    <Input type={"password"}
+                           placeholder={"password"}
+                           className={"sign-in-frame-password"}
                            onChange={(e) => setPassword(e.target.value)}
                     />
-                    
+
                     <Image src={close}
                            className="sign-in-frame-ellipse1"
                            onClick={() => history.push('/')}
@@ -94,6 +106,11 @@ const SignInFrame = () => {
                     {isWrongPassword && (
                         <span className={"error-password"}>
                             Password must contain at least 10 characters, 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character
+                        </span>
+                    )}
+                    {isWrongAuth && (
+                        <span className={"error-auth"}>
+                            Incorrect email or password
                         </span>
                     )}
                 </div>

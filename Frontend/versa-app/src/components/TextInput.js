@@ -2,12 +2,13 @@
 
 class TextInput extends React.Component {
     render() {
-        const {placeholder, className} = this.props;
+        const {placeholder, className, onChange} = this.props;
 
         return (
             <textarea
                    placeholder={placeholder}
                    className={className}
+                   onChange={onChange}
             />
         );
     }

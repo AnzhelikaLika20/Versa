@@ -5,12 +5,21 @@ import Button from "./Button";
 import React from "react";
 import {useHistory} from "react-router-dom";
 import '../css/ProfileFrame.css'
+import axios from "axios";
 
 
 const ProfileFrame = () => {
     const history = useHistory();
-    const logOut = () => {
-        localStorage.removeItem('token')
+    const logOut = async () => {
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        history.push('/')
+    }
+
+    const deleteAccount = async () => {
+        await axios.delete('http://localhost/api/v1/auth')
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
         history.push('/')
     }
     return (
@@ -35,7 +44,7 @@ const ProfileFrame = () => {
                         text="Delete account"
                         backgroundColor="rgba(254, 114, 101)"
                         id="delete-button"
-                        onClick={logOut}
+                        onClick={deleteAccount}
                     />
                     <span className="account-frame-title">
                         <span>Personal account management</span>
