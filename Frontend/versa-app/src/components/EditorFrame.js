@@ -21,14 +21,28 @@ const EditorFrame = () => {
     const [text, setText] = useState('');
 
     const loadFile = async () => {
-        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        console.log(text)
+        let blob = new Blob([text], {type: 'text/plain'});
         let formData = new FormData();
-        formData.append("file", blob, "file.txt");
+        formData.append('file', blob, 'file.txt');
+        const headers = {
+            'Content-Type': 'multipart/form-data'
+        }
         try {
-            const response = await axios.post('http://localhost/api/v1/files', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+            const response = await axios.post('http://localhost/api/v1/files', formData, { headers })
+            console.log(response.data)
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log(error.response)
+            }
+        }
+    }
+
+    const deleteFile = async () => {
+        const fileName = 'file.txt'
+        try {
+            const response = await axios.delete(`http://localhost/api/v1/files/${fileName}`, {
+                version: 2
             })
             console.log(response.data)
         } catch (error) {
@@ -77,6 +91,7 @@ const EditorFrame = () => {
                 <IconButton
                     icon={RiDeleteBin2Fill}
                     className="delete-icon"
+                    onClick={deleteFile}
                 />
 
                 <IconButton
