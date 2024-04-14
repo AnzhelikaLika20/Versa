@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Transactions;
 using Amazon.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,15 +17,16 @@ public class FilesController(IFileService fileService) : ControllerBase
     {
         try
         {
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             var currentUser = User.Identity.Name;
+            await fileService.StoreFileInfo(file, currentUser);
             var response = await fileService.SaveFile(file, currentUser);
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                fileService.StoreFileInfo(file, currentUser);
+                transaction.Complete();
                 return Ok("File uploaded successfully");
             }
-
             return StatusCode((int)response.HttpStatusCode, "Failed to upload file");
         }
         catch (AmazonS3Exception ex)
@@ -37,7 +39,7 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("get-file")]
+    [HttpGet("{fileName}")]
     public async Task<IActionResult> GetFileByVersion(string fileName, int version)
     {
         try
@@ -64,7 +66,7 @@ public class FilesController(IFileService fileService) : ControllerBase
     }
 
 
-    [HttpDelete("delete-file")]
+    [HttpDelete("{fileName}")]
     public async Task<IActionResult> DeleteFileVersion(string fileName, int version)
     {
         try
@@ -74,7 +76,6 @@ public class FilesController(IFileService fileService) : ControllerBase
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                fileService.DropFileVersion(fileName, version, currentUser);
                 return Ok("File dropped successfully");
             }
 
@@ -95,6 +96,7 @@ public class FilesController(IFileService fileService) : ControllerBase
     {
         var currentUser = User.Identity.Name;
         var files = await fileService.GetAllFiles(currentUser);
+        files = files.OrderBy(x => x.CreationTime).ToList();
 
         return Ok(files);
     }
