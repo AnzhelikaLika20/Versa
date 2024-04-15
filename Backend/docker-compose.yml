@@ -1,0 +1,58 @@
+﻿services:
+  api:
+    depends_on:
+      - database
+    image: anjelikalika/versaproject
+    restart: 
+      always
+    networks: 
+      - app-network
+      - versa-network
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+    ports:
+      - "8080:8080"
+  database:
+    image: postgres
+    networks: 
+      - versa-network
+    environment:
+      POSTGRES_USER: ${DATABASESETTINGS__USERID}
+      POSTGRES_PASSWORD: ${DATABASESETTINGS__PASSWORD}
+      POSTGRES_DB: ${DATABASESETTINGS__DATABASE}
+    ports:
+      - "15432:5432"
+  web:
+    build:
+      context: ../Frontend/versa-app
+      dockerfile: Dockerfile
+    depends_on:
+      - versaproject.api
+    image: frolovbuk/versa-app-web
+    restart: 
+      always
+    environment:
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ../Frontend/versa-app/src:/versa-app/src
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
+  nginx:
+    networks:
+      - app-network
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+      - "443:443"
+networks:
+  app-network:
+    driver: bridge
+  versa-network:
+    driver: bridge
