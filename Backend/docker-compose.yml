@@ -28,8 +28,9 @@
     build:
       context: ../Frontend/versa-app
       dockerfile: Dockerfile
-    depends_on: 
-      - api
+    depends_on:
+      - versaproject.api
+    image: frolovbuk/versa-app-web
     restart: 
       always
     environment:
