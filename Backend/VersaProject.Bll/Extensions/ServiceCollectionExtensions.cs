@@ -9,5 +9,6 @@ public static class ServiceCollectionExtensions
     public static void AddBllServices(this IServiceCollection services)
     {
         services.AddScoped<IFileService, FileService>();
+        services.AddScoped<IAuthService, AuthService>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Transactions;
 using Amazon.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,21 +8,23 @@ using VersaProject.Bll.Services.Interfaces;
 namespace VersaProject.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/files")]
 [Authorize]
 public class FilesController(IFileService fileService) : ControllerBase
 {
-    [HttpPost("UploadFile")]
+    [HttpPost]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         try
         {
+            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             var currentUser = User.Identity.Name;
+            await fileService.StoreFileInfo(file, currentUser);
             var response = await fileService.SaveFile(file, currentUser);
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                fileService.StoreFileInfo(file, currentUser);
+                transaction.Complete();
                 return Ok("File uploaded successfully");
             }
 
@@ -37,7 +40,7 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("GetFileByVersion")]
+    [HttpGet("{fileName}")]
     public async Task<IActionResult> GetFileByVersion(string fileName, int version)
     {
         try
@@ -64,7 +67,7 @@ public class FilesController(IFileService fileService) : ControllerBase
     }
 
 
-    [HttpDelete("DeleteFileVersion")]
+    [HttpDelete("{fileName}")]
     public async Task<IActionResult> DeleteFileVersion(string fileName, int version)
     {
         try
@@ -72,11 +75,7 @@ public class FilesController(IFileService fileService) : ControllerBase
             var currentUser = User.Identity.Name;
             var response = await fileService.DeleteFile(fileName, version, currentUser);
 
-            if (response.HttpStatusCode == HttpStatusCode.OK)
-            {
-                fileService.DropFileVersion(fileName, version, currentUser);
-                return Ok("File dropped successfully");
-            }
+            if (response.HttpStatusCode == HttpStatusCode.OK) return Ok("File dropped successfully");
 
             return StatusCode((int)response.HttpStatusCode, "Failed to delete file");
         }
@@ -90,11 +89,12 @@ public class FilesController(IFileService fileService) : ControllerBase
         }
     }
 
-    [HttpGet("GetAllFiles")]
+    [HttpGet]
     public async Task<IActionResult> GetAllFiles()
     {
         var currentUser = User.Identity.Name;
         var files = await fileService.GetAllFiles(currentUser);
+        files = files.OrderBy(x => x.CreationTime).ToList();
 
         return Ok(files);
     }
