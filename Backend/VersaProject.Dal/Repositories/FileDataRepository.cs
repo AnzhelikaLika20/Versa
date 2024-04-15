@@ -7,10 +7,10 @@ namespace VersaProject.Dal.Repositories;
 
 public class FileDataRepository(ApplicationDbContext context) : IFileDataRepository
 {
-    public void SaveFileDataAsync(FileData fileData)
+    public async Task SaveFileDataAsync(FileData fileData)
     {
         context.FilesData.Add(fileData);
-        context.SaveChangesAsync();
+        await context.SaveChangesAsync();
     }
 
     public async Task<FileData?> GetLatestFileData(string fileName, string login)
@@ -24,16 +24,11 @@ public class FileDataRepository(ApplicationDbContext context) : IFileDataReposit
         return latestFileVersion;
     }
 
-    public async void DropFileVersion(string fileName, int version, string currentUser)
+    public async Task DropFileVersion(string fileName, int version, string currentUser)
     {
-        var entityToDelete = await context.FilesData.FirstOrDefaultAsync(e =>
-            e.UserLogin == currentUser && e.FileName == fileName && e.Version == version);
-
-        if (entityToDelete != null)
-        {
-            context.FilesData.Remove(entityToDelete);
-            await context.SaveChangesAsync();
-        }
+        await context.FilesData.Where(e =>
+            e.UserLogin == currentUser && e.FileName == fileName && e.Version == version).ExecuteDeleteAsync();
+        await context.SaveChangesAsync();
     }
 
     public async Task<List<FileData>> GetAllFiles(string currentUser)

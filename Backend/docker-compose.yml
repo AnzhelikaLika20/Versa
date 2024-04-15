@@ -1,5 +1,5 @@
 ﻿services:
-  versaproject.api:
+  api:
     depends_on:
       - database
     image: anjelikalika/versaproject
@@ -29,8 +29,7 @@
       context: ../Frontend/versa-app
       dockerfile: Dockerfile
     depends_on: 
-      - versaproject.api
-    image: versa-app-web
+      - api
     restart: 
       always
     environment:
@@ -51,7 +50,6 @@
     ports:
       - "80:80"
       - "443:443"
-
 networks:
   app-network:
     driver: bridge

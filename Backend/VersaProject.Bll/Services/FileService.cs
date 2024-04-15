@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -20,16 +21,16 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         var accessKey = cloudSettings.Value.AccessKeyId;
 
         var s3Client = new AmazonS3Client(accessKey, secretKey, configsS3);
-        var request = CreatePutObjectRequest(file, currentUser);
+        var request = await CreatePutObjectRequest(file, currentUser);
         var response = await s3Client.PutObjectAsync(request);
 
         return response;
     }
 
-    public async void StoreFileInfo(IFormFile file, string currentUser)
+    public async Task StoreFileInfo(IFormFile file, string currentUser)
     {
         var uniqueId = Guid.NewGuid().ToString();
-        var newVersion = GetLastFileVersion(file, currentUser).Result + 1;
+        var newVersion = await GetLastFileVersion(file, currentUser) + 1;
         var fileName = file.FileName;
 
         var fileData = new FileData
@@ -41,7 +42,7 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
             CreationTime = DateTime.Now
         };
 
-        fileDataRepository.SaveFileDataAsync(fileData);
+        await fileDataRepository.SaveFileDataAsync(fileData);
     }
 
     public async Task<GetObjectResponse> GetFile(string fileName, int version, string currentUser)
@@ -69,6 +70,9 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         var request = CreateDeleteObjectRequest(fileId);
         var response = await s3Client.DeleteObjectAsync(request);
 
+        if (response.HttpStatusCode == HttpStatusCode.NoContent)
+            await DropFileVersion(fileName, version, currentUser);
+
         return response;
     }
 
@@ -86,9 +90,18 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         return await fileDataRepository.GetAllFiles(currentUser);
     }
 
-    public async void DropFileVersion(string fileName, int version, string currentUser)
+    public async Task DropFileVersion(string fileName, int version, string currentUser)
     {
-        fileDataRepository.DropFileVersion(fileName, version, currentUser);
+        await fileDataRepository.DropFileVersion(fileName, version, currentUser);
+    }
+
+    public async Task<int> GetLastFileVersion(IFormFile file, string currentUser)
+    {
+        var fileName = file.FileName;
+        var latestFileVersion = await fileDataRepository.GetLatestFileData(fileName, currentUser);
+        if (latestFileVersion == null)
+            return 0;
+        return latestFileVersion.Version;
     }
 
     private AmazonS3Config GetS3Config()
@@ -102,18 +115,12 @@ public class FileService(IOptionsSnapshot<YandexCloudSettings> cloudSettings, IF
         return configsS3;
     }
 
-    private async Task<int> GetLastFileVersion(IFormFile file, string currentUser)
+    private async Task<PutObjectRequest> CreatePutObjectRequest(
+        IFormFile file,
+        string currentUser
+    )
     {
-        var fileName = file.FileName;
-        var latestFileVersion = await fileDataRepository.GetLatestFileData(fileName, currentUser);
-        if (latestFileVersion == null)
-            return -1;
-        return latestFileVersion.Version;
-    }
-
-    private PutObjectRequest CreatePutObjectRequest(IFormFile file, string currentUser)
-    {
-        var newVersion = GetLastFileVersion(file, currentUser).Result + 1;
+        var newVersion = await GetLastFileVersion(file, currentUser);
         var fileName = $"{file.FileName}_{newVersion}_{currentUser}";
         var request = new PutObjectRequest
         {
