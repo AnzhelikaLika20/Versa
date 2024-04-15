@@ -25,15 +25,20 @@
     ports:
       - "15432:5432"
   web:
+    build:
+      context: ../Frontend/versa-app
+      dockerfile: Dockerfile
     depends_on: 
       - api
     restart: 
       always
+    environment:
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ../Frontend/versa-app/src:/versa-app/src
     networks:
       - app-network
-    build:
-      context: ../Frontend/versa-app
-      dockerfile: Dockerfile
     ports:
       - "3000:3000"
   nginx:

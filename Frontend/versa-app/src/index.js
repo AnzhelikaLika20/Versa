@@ -13,6 +13,7 @@ import NotFound from './components/NotFound'
 import EditorFrame from "./components/EditorFrame";
 import SignInFrame from "./components/SignInFrame";
 import SignUpFrame from "./components/SignUpFrame";
+import ProfileFrame from "./components/ProfileFrame";
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                 <Route component={EditorFrame} path="/editor"/>
                 <Route component={SignInFrame} path="/signin"/>
                 <Route component={SignUpFrame} path="/signup"/>
+                <Route component={ProfileFrame} path="/profile"/>
                 <Route component={NotFound} path="**"/>
                 <Redirect to="**"/>
             </Switch>
