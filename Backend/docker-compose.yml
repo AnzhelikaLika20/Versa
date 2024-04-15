@@ -30,7 +30,7 @@
       dockerfile: Dockerfile
     depends_on: 
       - versaproject.api
-    image: versa-app-web
+    image: frolovbuk/versa-app-web
     restart: 
       always
     environment:
