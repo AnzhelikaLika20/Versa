@@ -29,7 +29,7 @@
       context: ../Frontend/versa-app
       dockerfile: Dockerfile
     depends_on:
-      - versaproject.api
+      - api
     image: frolovbuk/versa-app-web
     restart: 
       always
