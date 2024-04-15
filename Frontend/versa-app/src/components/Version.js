@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import axios from "axios";
 
 class Version extends Component {
     constructor(props) {
@@ -32,8 +33,8 @@ class Version extends Component {
     render() {
         const { el, onClick } = this.props;
         const hoveredStyle = {
-            backgroundColor: this.state.isClicked ? 'rgb(81, 208, 210)' : 'rgb(1, 3, 26, 1)',
-            color: this.state.isClicked ? 'rgb(1, 3, 26, 1)' : 'rgba(217, 217, 217, 1)',
+            backgroundColor: this.state.isHovered ? 'rgb(81, 208, 210)' : 'rgb(1, 3, 26, 1)',
+            color: this.state.isHovered ? 'rgb(1, 3, 26, 1)' : 'rgba(217, 217, 217, 1)',
             cursor: this.state.isHovered ? 'pointer' : 'default',
         }
 
@@ -42,7 +43,7 @@ class Version extends Component {
                 className="editor-frame-version"
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleMouseClick}
+                onClick={onClick}
                 style={hoveredStyle}
             >
                 <span>{el['fileName'] + '_' + el['version']}</span>

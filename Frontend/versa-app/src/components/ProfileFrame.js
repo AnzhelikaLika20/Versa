@@ -11,15 +11,13 @@ import axios from "axios";
 const ProfileFrame = () => {
     const history = useHistory();
     const logOut = async () => {
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        localStorage.clear()
         history.push('/')
     }
 
     const deleteAccount = async () => {
         await axios.delete('http://localhost/api/v1/auth')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
+        localStorage.clear()
         history.push('/')
     }
     return (

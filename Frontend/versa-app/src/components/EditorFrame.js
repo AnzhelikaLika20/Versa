@@ -2,7 +2,7 @@
 import {Helmet} from 'react-helmet';
 import './../css/EditorFrame.css';
 import {FaCameraRetro} from "react-icons/fa6"; // <FaCameraRetro /> // snapshot
-import {FaCheck} from "react-icons/fa"; //  <FaCheck /> // checkout
+import {MdOutlineDownloading} from "react-icons/md"; //  <MdOutlineDownloading /> // download (not implemented)
 import {RiDeleteBin2Fill} from "react-icons/ri"; // <RiDeleteBin2Fill /> // delete
 import {CgProfile} from "react-icons/cg"; // <CgProfile /> // profile
 import TextInput from "./TextInput";
@@ -11,7 +11,6 @@ import Versions from "./Versions";
 import {useHistory} from "react-router-dom";
 import {useState} from 'react'
 import axios from "axios";
-import versions from "./Versions";
 
 axios.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('accessToken')}`;
@@ -20,12 +19,20 @@ axios.interceptors.request.use(config => {
 
 const EditorFrame = () => {
     const history = useHistory();
-    const [text, setText] = useState('');
     const [versions, setVersions] = useState([])
 
-    const loadFile = async () => {
-        console.log(text)
-        let blob = new Blob([text], {type: 'text/plain'});
+    const loadAllVersions = async () => {
+        try {
+            let response = await axios.get('http://localhost/api/v1/files')
+            setVersions(response.data)
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log(error.response)
+            }
+        }
+    }
+    const saveFile = async () => {
+        let blob = new Blob([localStorage.getItem('content')], {type: 'text/plain'});
         let formData = new FormData();
         formData.append('file', blob, 'file.txt');
         const headers = {
@@ -33,9 +40,7 @@ const EditorFrame = () => {
         }
         try {
             await axios.post('http://localhost/api/v1/files', formData, { headers })
-            let response = await axios.get('http://localhost/api/v1/files')
-            console.log(response.data)
-            setVersions(response.data)
+            loadAllVersions().then()
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log(error.response)
@@ -44,14 +49,12 @@ const EditorFrame = () => {
     }
 
     const deleteFile = async () => {
-        const fileName = 'file.txt'
-        const version = 1
-        console.log(version)
+        const fileName = localStorage.getItem('fileName')
+        const version = localStorage.getItem('version')
         try {
             await axios.delete(`http://localhost/api/v1/files/${fileName}?version=${version}`)
-            let response = await axios.get('http://localhost/api/v1/files')
-            console.log(response.data)
-            setVersions(response.data)
+            loadAllVersions().then()
+            localStorage.setItem('content', '')
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.log(error.response)
@@ -59,6 +62,7 @@ const EditorFrame = () => {
         }
     }
 
+    loadAllVersions().then()
     return (
         <div className="editor-frame-container">
             <Helmet>
@@ -70,7 +74,7 @@ const EditorFrame = () => {
                     <TextInput
                         placeholder={"Type your text here..."}
                         className={"editor-frame-text"}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={(e) => localStorage.setItem('content', e.target.value)}
                     />
                 </div>
                 <div className="editor-frame-versions">
@@ -86,8 +90,8 @@ const EditorFrame = () => {
                 </span>
 
                 <IconButton
-                    icon={FaCheck}
-                    className="checkout-icon"
+                    icon={MdOutlineDownloading}
+                    className="load-icon"
                 />
 
                 <IconButton
@@ -99,8 +103,8 @@ const EditorFrame = () => {
                 <IconButton
                     icon={FaCameraRetro}
                     className="snapshot-icon"
-                    onChange={(e) => setText(e.target.value)}
-                    onClick={loadFile}
+                    onChange={(e) => localStorage.setItem('content', e.target.value)}
+                    onClick={saveFile}
                 />
 
                 <IconButton
